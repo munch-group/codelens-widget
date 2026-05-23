@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Showcase – pytutor-widget</title>
+<title>Showcase – codelens-widget</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -124,7 +124,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">pytutor-widget</span>
+    <span class="navbar-title">codelens-widget</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -140,7 +140,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/munch-group/pytutor-widget/"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/munch-group/codelens-widget/"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -234,12 +234,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>A CodeLens-style execution visualizer that uses <strong>Philip Guo’s real Online Python Tutor frontend</strong> (<code>pytutor.js</code>). The execution trace is generated in the live kernel by Guo’s own <code>pg_logger</code> (vendored, MIT), so it is in his <strong>exact schema</strong>, and rendered by <code>pytutor.js</code> inside a self-contained <code>&lt;iframe&gt;</code> — step through with the forward/back buttons, inspect the call stack, and watch the heap drawn as reference diagrams with pointer arrows.</p>
-<p>Everything is vendored under <code>pytutor_widget/vendor/</code>, so it runs <strong>fully offline</strong> and the same way in VS Code, JupyterLab, Notebook 7, and Colab.</p>
+<p>Everything is vendored under <code>codelens_widget/vendor/</code>, so it runs <strong>fully offline</strong> and the same way in VS Code, JupyterLab, Notebook 7, and Colab.</p>
 <blockquote class="blockquote">
-<p><strong>Setup:</strong> keep the <code>pytutor_widget/</code> package folder next to this notebook, and <code>pip install anywidget</code>. Online Python Tutor is © Philip J. Guo, MIT-licensed.</p>
+<p><strong>Setup:</strong> keep the <code>codelens_widget/</code> package folder next to this notebook, and <code>pip install anywidget</code>. Online Python Tutor is © Philip J. Guo, MIT-licensed.</p>
 </blockquote>
 <div id="7d50eaac" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pytutor_widget <span class="im">import</span> CodeLens</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> codelens_widget <span class="im">import</span> CodeLens</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="insertion-sort" class="level2">
 <h2 class="anchored" data-anchor-id="insertion-sort">1. Insertion sort</h2>
@@ -364,7 +364,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Rendering needs a browser, but the <strong>trace data</strong> can be validated headlessly. This asserts the trace matches Online Python Tutor’s schema: the per-step keys, <code>REF</code>-based aliasing, heap object tags (<code>LIST</code>, <code>INSTANCE</code>, …), the call stack, and JSON-serializability (the contract with <code>pytutor.js</code>).</p>
 <div id="c8e784d8" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pytutor_widget <span class="im">import</span> trace_code</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> codelens_widget <span class="im">import</span> trace_code</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>REQUIRED <span class="op">=</span> {<span class="st">"line"</span>, <span class="st">"event"</span>, <span class="st">"func_name"</span>, <span class="st">"globals"</span>, <span class="st">"ordered_globals"</span>,</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"stack_to_render"</span>, <span class="st">"heap"</span>, <span class="st">"stdout"</span>}</span>

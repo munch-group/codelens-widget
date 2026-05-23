@@ -4,7 +4,7 @@
     "href": "pages/demo.html",
     "title": "Showcase",
     "section": "",
-    "text": "A CodeLens-style execution visualizer that uses Philip Guo’s real Online Python Tutor frontend (pytutor.js). The execution trace is generated in the live kernel by Guo’s own pg_logger (vendored, MIT), so it is in his exact schema, and rendered by pytutor.js inside a self-contained &lt;iframe&gt; — step through with the forward/back buttons, inspect the call stack, and watch the heap drawn as reference diagrams with pointer arrows.\nEverything is vendored under pytutor_widget/vendor/, so it runs fully offline and the same way in VS Code, JupyterLab, Notebook 7, and Colab.\nfrom pytutor_widget import CodeLens",
+    "text": "A CodeLens-style execution visualizer that uses Philip Guo’s real Online Python Tutor frontend (pytutor.js). The execution trace is generated in the live kernel by Guo’s own pg_logger (vendored, MIT), so it is in his exact schema, and rendered by pytutor.js inside a self-contained &lt;iframe&gt; — step through with the forward/back buttons, inspect the call stack, and watch the heap drawn as reference diagrams with pointer arrows.\nEverything is vendored under codelens_widget/vendor/, so it runs fully offline and the same way in VS Code, JupyterLab, Notebook 7, and Colab.\nfrom codelens_widget import CodeLens",
     "crumbs": [
       "Demo",
       "Showcase"
@@ -92,7 +92,7 @@
     "href": "pages/demo.html#self-test-guos-exact-schema-headless",
     "title": "Showcase",
     "section": "8. Self-test — Guo’s exact schema (headless)",
-    "text": "8. Self-test — Guo’s exact schema (headless)\nRendering needs a browser, but the trace data can be validated headlessly. This asserts the trace matches Online Python Tutor’s schema: the per-step keys, REF-based aliasing, heap object tags (LIST, INSTANCE, …), the call stack, and JSON-serializability (the contract with pytutor.js).\n\nimport json\nfrom pytutor_widget import trace_code\n\nREQUIRED = {\"line\", \"event\", \"func_name\", \"globals\", \"ordered_globals\",\n            \"stack_to_render\", \"heap\", \"stdout\"}\n\nt = trace_code(\"\"\"\nx = [1, 2, 3]\ny = x\ny.append(4)\n\"\"\")\nassert set(t.keys()) == {\"code\", \"trace\"}\nassert all(REQUIRED &lt;= set(p.keys()) for p in t[\"trace\"])\nassert {\"step_line\"} &lt;= {p[\"event\"] for p in t[\"trace\"]}\n\nlast = t[\"trace\"][-1]\ngx, gy = last[\"globals\"][\"x\"], last[\"globals\"][\"y\"]\nassert gx[0] == \"REF\" and gx == gy, \"aliasing: x and y must share one heap id\"\nassert last[\"heap\"][gx[1]][0] == \"LIST\"\nassert last[\"heap\"][gx[1]][1:] == [1, 2, 3, 4]\n\n# instance object encodes as INSTANCE with a class name + fields\nti = trace_code(\"class P:\\n    def __init__(s): s.x = 1\\np = P()\")\nli = ti[\"trace\"][-1]\ninst = li[\"heap\"][li[\"globals\"][\"p\"][1]]\nassert inst[0] == \"INSTANCE\" and inst[1] == \"P\"\n\n# recursion produces a growing stack_to_render\ntr = trace_code(\"def f(n):\\n    if n&lt;=1: return 1\\n    return n*f(n-1)\\nf(4)\")\nassert max(len(p[\"stack_to_render\"]) for p in tr[\"trace\"]) &gt;= 4\n\n# whole thing is JSON-serializable (heap int keys -&gt; string keys, as pytutor.js expects)\nrt = json.loads(json.dumps(t))\nassert all(isinstance(k, str) for k in rt[\"trace\"][-1][\"heap\"])\n\nprint(\"All schema self-tests passed.\")\nprint(\"insertion-trace points:\", len(t[\"trace\"]),\n      \"| events:\", sorted({p[\"event\"] for p in t[\"trace\"]}))",
+    "text": "8. Self-test — Guo’s exact schema (headless)\nRendering needs a browser, but the trace data can be validated headlessly. This asserts the trace matches Online Python Tutor’s schema: the per-step keys, REF-based aliasing, heap object tags (LIST, INSTANCE, …), the call stack, and JSON-serializability (the contract with pytutor.js).\n\nimport json\nfrom codelens_widget import trace_code\n\nREQUIRED = {\"line\", \"event\", \"func_name\", \"globals\", \"ordered_globals\",\n            \"stack_to_render\", \"heap\", \"stdout\"}\n\nt = trace_code(\"\"\"\nx = [1, 2, 3]\ny = x\ny.append(4)\n\"\"\")\nassert set(t.keys()) == {\"code\", \"trace\"}\nassert all(REQUIRED &lt;= set(p.keys()) for p in t[\"trace\"])\nassert {\"step_line\"} &lt;= {p[\"event\"] for p in t[\"trace\"]}\n\nlast = t[\"trace\"][-1]\ngx, gy = last[\"globals\"][\"x\"], last[\"globals\"][\"y\"]\nassert gx[0] == \"REF\" and gx == gy, \"aliasing: x and y must share one heap id\"\nassert last[\"heap\"][gx[1]][0] == \"LIST\"\nassert last[\"heap\"][gx[1]][1:] == [1, 2, 3, 4]\n\n# instance object encodes as INSTANCE with a class name + fields\nti = trace_code(\"class P:\\n    def __init__(s): s.x = 1\\np = P()\")\nli = ti[\"trace\"][-1]\ninst = li[\"heap\"][li[\"globals\"][\"p\"][1]]\nassert inst[0] == \"INSTANCE\" and inst[1] == \"P\"\n\n# recursion produces a growing stack_to_render\ntr = trace_code(\"def f(n):\\n    if n&lt;=1: return 1\\n    return n*f(n-1)\\nf(4)\")\nassert max(len(p[\"stack_to_render\"]) for p in tr[\"trace\"]) &gt;= 4\n\n# whole thing is JSON-serializable (heap int keys -&gt; string keys, as pytutor.js expects)\nrt = json.loads(json.dumps(t))\nassert all(isinstance(k, str) for k in rt[\"trace\"][-1][\"heap\"])\n\nprint(\"All schema self-tests passed.\")\nprint(\"insertion-trace points:\", len(t[\"trace\"]),\n      \"| events:\", sorted({p[\"event\"] for p in t[\"trace\"]}))",
     "crumbs": [
       "Demo",
       "Showcase"
@@ -123,7 +123,7 @@
     "href": "api/CodeLens.html",
     "title": "CodeLens",
     "section": "",
-    "text": "CodeLens\npytutor_widget.CodeLens(\n    code,\n    height=520,\n    lang='py3',\n    options=None,\n    cumulative_mode=False,\n    heap_primitives=False,\n)",
+    "text": "CodeLens\ncodelens_widget.CodeLens(\n    code,\n    height=520,\n    lang='py3',\n    options=None,\n    cumulative_mode=False,\n    heap_primitives=False,\n)",
     "crumbs": [
       "Some section",
       "CodeLens"
@@ -134,7 +134,7 @@
     "href": "pages/overview.html",
     "title": "Overview",
     "section": "",
-    "text": "pytutor-widget is an animated, turtle-compatible drawing widget for Jupyter notebooks. You write ordinary turtle code in Python; the widget records each command and replays it as a smooth canvas animation right below the cell.\nBuilt on anywidget, it behaves identically in VS Code, JupyterLab, Notebook 7, and Colab, and works offline.",
+    "text": "codelens-widget is an animated, turtle-compatible drawing widget for Jupyter notebooks. You write ordinary turtle code in Python; the widget records each command and replays it as a smooth canvas animation right below the cell.\nBuilt on anywidget, it behaves identically in VS Code, JupyterLab, Notebook 7, and Colab, and works offline.",
     "crumbs": [
       "Overview"
     ]
@@ -144,7 +144,7 @@
     "href": "pages/overview.html#installation",
     "title": "Overview",
     "section": "Installation",
-    "text": "Installation\n\npixicondapip\n\n\npixi workspace channel add munch-group\npixi add pytutor-widget\n\n\nconda install -c munch-group pytutor-widget\n\n\npip install pytutor-widget\n\n\n\n\nimport pytutor_widget\n\n\n%%codelens\ndef insertion_sort(a):\n    for i in range(1, len(a)):\n        key = a[i]\n        j = i - 1\n        while j &gt;= 0 and a[j] &gt; key:\n            a[j + 1] = a[j]\n            j -= 1\n        a[j + 1] = key\n    return a\n\ndata = [5, 2, 9, 1]\ninsertion_sort(data)",
+    "text": "Installation\n\npixicondapip\n\n\npixi workspace channel add munch-group\npixi add codelens-widget\n\n\nconda install -c munch-group codelens-widget\n\n\npip install codelens-widget\n\n\n\n\nimport codelens_widget\n\n\n%%codelens\ndef insertion_sort(a):\n    for i in range(1, len(a)):\n        key = a[i]\n        j = i - 1\n        while j &gt;= 0 and a[j] &gt; key:\n            a[j + 1] = a[j]\n            j -= 1\n        a[j + 1] = key\n    return a\n\ndata = [5, 2, 9, 1]\ninsertion_sort(data)",
     "crumbs": [
       "Overview"
     ]

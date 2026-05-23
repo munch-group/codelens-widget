@@ -2,5 +2,4 @@
 # Project: pytutor-widget
 # Version: 0.0.9999
 # The remainder of this file is compressed using zlib.
-pytutor_widget.modulename.functionname py:function 1 api/functionname.html#pytutor_widget.modulename.functionname -
-pytutor_widget.modulename.scriptname py:function 1 api/scriptname.html#pytutor_widget.modulename.scriptname -
+pytutor_widget.CodeLens py:class 1 api/CodeLens.html#pytutor_widget.CodeLens -

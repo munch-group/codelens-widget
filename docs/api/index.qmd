@@ -5,6 +5,3 @@
 Some description...
 
 
-| | |
-| --- | --- |
-| [CodeLens](CodeLens.qmd#pytutor_widget.CodeLens) |  |

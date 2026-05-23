@@ -1,6 +1,0 @@
-# scriptname { #pytutor_widget.modulename.scriptname }
-
-```python
-pytutor_widget.modulename.scriptname()
-```
-

@@ -1,0 +1,16 @@
+This package vendors Online Python Tutor by Philip J. Guo (philip@pgbovine.net),
+which is distributed under the MIT License.
+
+  Online Python Tutor
+  https://github.com/pgbovine/OnlinePythonTutor/
+  Copyright (C) Philip J. Guo
+
+Vendored files retain their original MIT license headers:
+  - pg_encoder.py, pg_logger.py            (Python backend / trace generator)
+  - vendor/pytutor.js, vendor/pytutor.css  (frontend visualizer)
+  - vendor/jsplumb.min.js (jsPlumb 1.3.10), vendor/jquery*, vendor/d3.v2.min.js,
+    vendor/jquery-ui.* , vendor/jquery.qtip.*  (third-party libraries OPT depends on,
+    under their respective MIT/permissive licenses)
+
+The pytutor_widget wrapper code (__init__.py and this packaging) only adapts and
+embeds the above; it makes no claim over the vendored works.

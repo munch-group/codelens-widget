@@ -55,9 +55,9 @@ website:
       align: left
       contents:
         - pages/overview.ipynb
-        - section: "Examples"
+        - section: "Demo"
           contents:
-            - pages/example.ipynb                   
+            - pages/demo.ipynb                   
 
 lightbox: true
 

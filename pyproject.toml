@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pytutor-widget"
+name = "codelens-widget"
 version = "0.1.26"
 description = "Project description"
 authors = [
@@ -22,9 +22,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/munch-group/pytutor-widget"
-Repository = "https://github.com/munch-group/pytutor-widget"
-Documentation = "https://munch-group.org/pytutor-widget"
+Homepage = "https://github.com/munch-group/codelens-widget"
+Repository = "https://github.com/munch-group/codelens-widget"
+Documentation = "https://munch-group.org/codelens-widget"
 
 [tool.setuptools]
 include-package-data = true
@@ -34,11 +34,11 @@ where = ["src"]
 exclude = ["test*"]
 
 [tool.setuptools.package-data]
-pytutor_widget = ["vendor/*", "NOTICE"]
+codelens_widget = ["vendor/*", "NOTICE"]
 
 [tool.pixi.workspace]
 channels = ["conda-forge", "munch-group"]
-platforms = ["osx-arm64",  "linux-64"]
+platforms = ["osx-arm64",  "linux-64", "win-64"]
 
 [tool.pixi.dependencies]
 python = ">=3.9,<3.14"
@@ -61,7 +61,7 @@ vscodenb = "*"
 r-rsvg = "*"
 
 # [tool.pixi.pypi-dependencies]
-# pytutor-widget = { path = ".", editable = true }
+# codelens-widget = { path = ".", editable = true }
 
 [tool.pixi.environments]
 default = {solve-group = "default"}

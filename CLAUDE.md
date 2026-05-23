@@ -1,213 +1,141 @@
-# Project Configuration for Claude
+# CLAUDE.md
 
-This file contains preferences and guidelines for working in this project.
+Project context for `pytutor_widget` — a CodeLens / Python-Tutor execution
+visualizer for Jupyter that emits **Philip Guo's exact trace schema** and renders
+it with his **real `pytutor.js`** frontend, embedded in a self-contained iframe.
 
-## MCP Server Usage Guidelines
+## What this is (and how it differs from the sibling)
 
-This project has several MCP (Model Context Protocol) servers available. Use them according to these guidelines:
+There are two execution-visualizer approaches in this lineage:
 
-**IMPORTANT: All MCP servers in this project should function transparently without prompting for user permission. Use them freely and directly when needed.**
+- `codelens_widget.py` (sibling): a *custom* dependency-free tracer + hand-rolled
+  stepper. Light, offline, but a from-scratch renderer.
+- `pytutor_widget/` (this package, under `src/`): emits **Guo's exact `{code, trace}` schema**
+  via his vendored `pg_logger`, and renders with the **real Online Python Tutor
+  frontend**. You inherit OPT's battle-tested reference diagrams (jsPlumb arrows,
+  nested heap layout) at the cost of bundling its legacy JS stack.
 
-The following servers are configured to work without permission prompts:
-- `paper-search`: Scientific literature searches
-- `string-db`: Protein interaction analysis
-- `ensembl-db`: Genomic data queries
-- `desktop-commander`: System operations and development tasks
+Use this one when you want fidelity to Python Tutor; use the sibling when you want
+a minimal, fully self-authored renderer.
 
-### Scientific Literature & Research
+## Project layout
 
-#### paper-search MCP Server
+```
+src/pytutor_widget/
+  __init__.py        # trace_code(), _build_html(), CodeLens widget, %%codelens magic
+  pg_logger.py       # VENDORED (patched) -- Guo's bdb-based tracer; entry: exec_script_str_local
+  pg_encoder.py      # VENDORED (unmodified) -- value/heap encoder (REF, LIST, DICT, INSTANCE, ...)
+  NOTICE             # MIT attribution for Online Python Tutor
+  vendor/            # VENDORED frontend + its pinned dependencies (see below)
+docs/pages/overview.ipynb   # showcase + headless schema self-test
+pyproject.toml       # packaging; runtime deps: anywidget, traitlets; ships vendor/* + NOTICE
+CLAUDE.md
+```
 
-**IMPORTANT: Always use `paper-search` MCP for scientific literature searches.**
+## Environment & commands
 
-**Use paper-search for searching and downloading academic papers from multiple scientific databases.**
+- Python 3.9+ (works on 3.12+ after the `imp` patch below). Runtime deps (`anywidget`,
+  `traitlets`) are declared in `pyproject.toml`; install the package with `pip install -e .`.
+- After install: `from pytutor_widget import CodeLens` (the importable package lives at `src/pytutor_widget/`).
+- Headless schema test (no browser needed): run the notebook's final cell.
+- JS sanity check of our own glue (not the vendored libs):
+  ```bash
+  python -c "import pytutor_widget as c; open('/tmp/e.mjs','w').write(c._ESM)"
+  node --check /tmp/e.mjs
+  ```
 
-Supported databases:
-- **arXiv**: Preprints in physics, mathematics, computer science
-- **PubMed**: Biomedical and life sciences literature
-- **bioRxiv**: Biology preprints
-- **medRxiv**: Medical preprints
-- **Google Scholar**: Broad academic search
-- **IACR ePrint**: Cryptography research
-- **Semantic Scholar**: AI-powered academic search
+## Architecture / data flow
 
-Available functions:
-- `search_arxiv()`: Search papers on arXiv
-- `download_arxiv()`: Download PDFs from arXiv
-- Similar search/download functions for other platforms
+1. `trace_code(src)` calls `pg_logger.exec_script_str_local(src, None, cumulative,
+   heap_primitives, finalizer, allow_all_modules=True)` with a finalizer that returns
+   `{"code": src, "trace": [...]}`. **The code runs in the live kernel** (we are not a
+   sandboxed web service like pythontutor.com), which is why tracing in-process is fine.
+2. `_build_html(trace, options)` assembles a **complete HTML document**: the vendored
+   CSS inline in `<style>`, the vendored JS inline in `<script>` (in the load order in
+   `_JS_FILES`), then a boot script that does
+   `new ExecutionVisualizer("viz", traceData, options)` and posts its height to the parent.
+3. The `CodeLens` widget syncs that document as the `srcdoc` traitlet. The `_ESM` frontend
+   creates an `<iframe>`, sets `srcdoc`, and listens for the height `postMessage` to
+   auto-resize.
 
-Features:
-- Returns papers in standardized format
-- Asynchronous requests for efficiency
-- Supports API keys for enhanced access (e.g., Semantic Scholar)
+### Why an iframe (important)
 
-**Use paper-search when:**
-- Finding scientific papers, articles, and publications
-- Searching by author names, keywords, or topics
-- Academic research queries
-- Citation lookups
-- Literature reviews
-- Downloading research papers
+`pytutor.js` is a legacy jQuery + jsPlumb app that expects to own a normal `document`
+(global jQuery, absolute-positioned SVG connectors, jQuery-UI slider). Embedding it
+directly into the notebook output DOM invites CSS collisions, global clashes, and
+jsPlumb offset bugs. A `srcdoc` iframe gives it the clean document it was written for, so
+it renders the same in VS Code, JupyterLab, and Colab. The trace is **precomputed in the
+kernel**, so the iframe only ever renders *data* -- it never executes user code -- which is
+why `sandbox="allow-scripts allow-same-origin"` is safe here.
 
-**Never use web search or other tools for scientific literature - always use paper-search.**
+## Guo's schema (what `pytutor.js` consumes)
 
-### Bioinformatics & Genomics
+Top level: `{"code": <source str>, "trace": [ <point>, ... ]}`. Each point has:
+`line`, `event` (`step_line`/`call`/`return`/`exception`/`uncaught_exception`/
+`instruction_limit_reached`), `func_name`, `globals` (name->encoded), `ordered_globals`,
+`stack_to_render` (frames with `func_name`, `encoded_locals`, `ordered_varnames`,
+`is_highlighted`, `frame_id`, `unique_hash`, ...), `heap`, `stdout`.
 
-#### string-db MCP Server
+Value encoding (`pg_encoder`): primitives inline (numbers/str/bool/None; special floats
+as `["SPECIAL_FLOAT","NaN"]`); compound values as `["REF", id]` with the object stored once
+in `heap` keyed by that id. Heap objects are tagged lists: `["LIST", ...]`, `["TUPLE", ...]`,
+`["DICT", [k,v], ...]`, `["SET", ...]`, `["INSTANCE", "Cls", [attr,val], ...]`,
+`["FUNCTION", "name(args)", parent_frame_id]`, `["CLASS", ...]`. Aliasing/cycles fall out of
+the REF model for free (two names -> same id -> one box, two arrows).
 
-**Use string-db for protein-protein interaction analysis and functional enrichment.**
+**Heap key gotcha:** in the Python dict, `heap` keys are *ints*; after `json.dumps` they
+become *strings* (JSON requires string keys). `pytutor.js` expects the string-keyed JSON
+form, so always validate post-serialization, not the in-memory dict.
 
-Available tools:
+## Vendored assets & pinned versions (in `vendor/`, load order in `_JS_FILES`)
 
-- **Identifier Mapping:**
-  - `get_string_ids`: Map protein names/IDs to STRING identifiers across species
-  - `resolve_proteins`: Standardize protein names to canonical STRING names
+`jquery.min.js` (1.8.2) -> `jquery-ui.min.js` (1.11.4) -> `d3.v2.min.js` (D3 **v2**) ->
+`jsplumb.min.js` (**jsPlumb 1.3.10**) -> `jquery.ba-bbq.min.js` -> `jquery.qtip.min.js` ->
+`pytutor.js`. CSS: `jquery-ui.min.css`, `jquery.qtip.css`, `pytutor.css`.
 
-- **Network Analysis:**
-  - `get_network`: Retrieve protein-protein interaction networks with confidence filtering
-  - `get_interaction_partners`: Find interaction partners for given proteins (with confidence thresholds)
+**Do not upgrade jsPlumb past 1.3.10** -- pytutor.js uses its old connector API and breaks
+on newer versions (per Guo's own header comment). D3 must stay v2 for the same reason.
 
-- **Functional Enrichment:**
-  - `get_enrichment`: Perform functional enrichment analysis (GO terms, KEGG pathways, domains)
-  - `get_ppi_enrichment`: Test if protein sets have statistically significant interactions
+## Patches applied to the vendored backend (re-apply if you re-vendor)
 
-- **Cross-Species Analysis:**
-  - `get_homology`: Retrieve protein homology information across species
-  - `get_homology_best`: Find best homology matches in target species
+- `pg_logger.py`: `import imp` -> an `importlib`-based shim (the `imp` module was removed in
+  Python 3.12; `imp.new_module` is replaced by `types.ModuleType`).
+- `pg_logger.py`: `import pg_encoder` -> `from . import pg_encoder` (so it works as a subpackage).
+- `pg_logger.py`: `DEBUG = True` -> `DEBUG = False` (otherwise erroring user code prints a
+  bdb traceback to the cell's stderr; with DEBUG off the error is captured as an
+  `exception` trace point instead, which is what we want).
+- `pg_logger.py`: two regex literals made raw (`r'class\s+'`, `r'\Z(?ms)'`) to silence
+  `SyntaxWarning` on modern Python.
+- The `resource`/`setrlimit` sandbox is Unix-only but already guarded by `try/except` and
+  by `disable_security_checks` (which `exec_script_str_local` sets), so no patch needed.
+- `pg_encoder.py` is unmodified.
 
-- **Utility:**
-  - `get_version`: Get current STRING database version
+## Gotchas & constraints
 
-**Supported species (common):**
-- Human (9606), Mouse (10090), Rat (10116)
-- Fruit fly (7227), C. elegans (6239), Yeast (4932)
+- The HTML document inlines the full ~850 KB vendor bundle, so each `CodeLens` instance
+  ships ~850 KB in its `srcdoc` traitlet. Fine on local kernels and Colab; just don't put
+  hundreds of them in one notebook.
+- **Core-Python only**, like Runestone's directive: only execution *state* is visualized.
+  Side effects beyond stdout (turtle, matplotlib, file/network I/O) are not shown.
+- `allow_all_modules=True` is passed because the code runs in the user's own kernel; drop
+  it if you ever expose this to untrusted input (and re-enable the security checks).
+- Constructor options live in `_DEFAULT_OPTIONS` and are overridable via
+  `CodeLens(code, options={...})`; `embeddedMode=True` gives the compact inline layout.
+- Browser support: the iframe + `postMessage` auto-resize works in Chromium (VS Code,
+  Colab) and modern Firefox/Safari. The visual rendering is the one thing not covered by
+  the headless tests -- verify once in your target frontend.
 
-**Use string-db when:**
-- Analyzing protein interactions and networks
-- Performing functional enrichment analysis
-- Mapping proteins across species
-- Finding interaction partners or homologs
-- Testing for PPI enrichment in protein sets
+## Updating the vendored Online Python Tutor
 
-#### ensembl-db MCP Server
+Re-fetch `pg_encoder.py`, `pg_logger.py`, and the `v3/js` + `v3/css` assets from an OPT
+source, drop them into place, then re-apply the four `pg_logger.py` patches above. Keep
+jsPlumb at 1.3.10 and D3 at v2. Re-run the notebook's schema self-test and `node --check`.
 
-**Use ensembl-db for genomic data retrieval and analysis via the Ensembl REST API.**
+## Testing approach
 
-Available tools (31 endpoints across 11 categories):
-
-- **Gene Lookup:**
-  - `lookup_gene_by_symbol`: Find genes by symbol (e.g., BRCA2)
-  - `lookup_gene_by_id`: Find genes by Ensembl stable ID
-
-- **Sequence Retrieval:**
-  - `get_sequence`: Retrieve DNA/RNA/protein sequences
-
-- **Variant Analysis:**
-  - `get_variants_for_region`: Find genetic variants in genomic regions
-  - `vep_region`: Predict variant consequences (Variant Effect Predictor)
-
-- **Cross-Species Homology:**
-  - `get_homology`: Find homologous genes/proteins across species
-
-- **Phenotype Data:**
-  - `get_phenotype_by_gene`: Retrieve phenotype annotations for genes
-
-- **Regulatory Features:**
-  - `get_regulatory_features`: Find regulatory elements in genomic regions
-
-- **Overlap Analysis:**
-  - `overlap_region`, `overlap_id`, `overlap_translation`: Find overlapping genomic features
-
-- **Cross-References:**
-  - `get_xrefs_by_gene`, `get_xrefs_by_symbol`, `get_xrefs_by_name`: External database references
-
-- **Coordinate Mapping:**
-  - Tools for mapping between assemblies and genomic/protein coordinates
-
-- **Ontology & Taxonomy:**
-  - Search and retrieve ontology terms and taxonomy information
-
-**Use ensembl-db when:**
-- Looking up genes by symbol or ID
-- Retrieving genomic sequences
-- Analyzing genetic variants and their effects
-- Finding gene homologs across species
-- Exploring phenotype associations
-- Identifying regulatory features
-- Mapping between genome assemblies
-
-### System Operations
-
-#### desktop-commander MCP Server
-
-**Use desktop-commander for advanced system interaction, terminal control, and development tasks.**
-
-Available capabilities:
-
-- **Terminal Control:**
-  - Execute terminal commands with output streaming
-  - Run long-running commands in background
-  - Manage and kill processes
-  - Monitor command output in real-time
-
-- **Filesystem Operations:**
-  - Read/write files
-  - Create/list directories
-  - Move files and directories
-  - Search files across filesystem
-  - Get file metadata
-  - Negative offset reading (like Unix `tail`)
-
-- **Code Editing:**
-  - Surgical text replacements in files
-  - Full file rewrites
-  - Multiple file editing
-  - Pattern-based replacements
-  - VSCode-ripgrep recursive code/text search
-
-- **Development Environment:**
-  - Execute code in memory (Python, Node.js, R)
-  - Instant data analysis for CSV/JSON files
-  - Interact with development servers and databases
-
-**Use desktop-commander when:**
-- Running terminal commands or shell scripts
-- Managing processes or background tasks
-- Performing filesystem operations
-- Editing code or text files
-- Searching code across the project
-- Executing code snippets for quick analysis
-- Interacting with development servers
-
-### General Purpose
-
-- **filesystem**: File operations within the workspace
-- **fetch**: Web content fetching for non-scientific content
-- **memory**: Persistent memory across conversations
-
-## Project Context
-
-- **Field**: Bioinformatics / Computational Biology
-- **Primary Language**: Python
-- **Environment**: Devcontainer with pixi package management
-
-## Code Style Preferences
-
-- Follow existing code style in the repository
-- Use type hints in Python code
-- Include docstrings for functions and classes
-- Follow scientific computing best practices
-
-## Citation Format
-
-When adding inline citations to scientific papers, use Author-Year format:
-- Up to two authors: (Munch, 2025) or (Munch and Hobolth, 2025)
-- Three or more: (Munch et al., 2025)
-- Citation labels should be hyperlinks to the paper on the journal website
-
-## Notes
-
-- This project uses MCP servers for enhanced capabilities
-- The devcontainer includes pixi for package management
-- MCP servers use pixi environments (conda packages + pip when needed)
-- PyPI-based servers are installed with pip in the shared pixi environment to ensure Python headers are available
+- **Schema (headless, authoritative):** `trace_code` output is deterministic and fully
+  validatable -- assert the per-point keys, `REF` aliasing (two names -> identical
+  `["REF",id]`), heap tags (`LIST`/`INSTANCE`/...), `stack_to_render` depth on recursion,
+  and `json.dumps` round-trip. This is the contract with `pytutor.js`.
+- **Glue (headless):** `node --check` on `_ESM` and on the inner boot `<script>`.
+- **Visual (manual):** open `docs/pages/overview.ipynb` in the target notebook frontend.

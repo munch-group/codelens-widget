@@ -2,100 +2,100 @@
   {
     "objectID": "pages/demo.html",
     "href": "pages/demo.html",
-    "title": "pytutor_widget — showcase & tests",
+    "title": "Showcase",
     "section": "",
     "text": "A CodeLens-style execution visualizer that uses Philip Guo’s real Online Python Tutor frontend (pytutor.js). The execution trace is generated in the live kernel by Guo’s own pg_logger (vendored, MIT), so it is in his exact schema, and rendered by pytutor.js inside a self-contained &lt;iframe&gt; — step through with the forward/back buttons, inspect the call stack, and watch the heap drawn as reference diagrams with pointer arrows.\nEverything is vendored under pytutor_widget/vendor/, so it runs fully offline and the same way in VS Code, JupyterLab, Notebook 7, and Colab.\nfrom pytutor_widget import CodeLens",
     "crumbs": [
       "Demo",
-      "`pytutor_widget` — showcase & tests"
+      "Showcase"
     ]
   },
   {
     "objectID": "pages/demo.html#insertion-sort",
     "href": "pages/demo.html#insertion-sort",
-    "title": "pytutor_widget — showcase & tests",
+    "title": "Showcase",
     "section": "1. Insertion sort",
     "text": "1. Insertion sort\nThe canonical CodeLens example. Step through with the buttons; the in-place swaps mutate the same list object on the heap.\n\n%%codelens\ndef insertion_sort(a):\n    for i in range(1, len(a)):\n        key = a[i]\n        j = i - 1\n        while j &gt;= 0 and a[j] &gt; key:\n            a[j + 1] = a[j]\n            j -= 1\n        a[j + 1] = key\n    return a\n\ndata = [5, 2, 9, 1]\ninsertion_sort(data)\n\n\n\n\n\nCodeLens(\"\"\"\ndef insertion_sort(a):\n    for i in range(1, len(a)):\n        key = a[i]\n        j = i - 1\n        while j &gt;= 0 and a[j] &gt; key:\n            a[j + 1] = a[j]\n            j -= 1\n        a[j + 1] = key\n    return a\n\ndata = [5, 2, 9, 1]\ninsertion_sort(data)\n\"\"\")",
     "crumbs": [
       "Demo",
-      "`pytutor_widget` — showcase & tests"
+      "Showcase"
     ]
   },
   {
     "objectID": "pages/demo.html#aliasing-the-whole-point-of-reference-diagrams",
     "href": "pages/demo.html#aliasing-the-whole-point-of-reference-diagrams",
-    "title": "pytutor_widget — showcase & tests",
+    "title": "Showcase",
     "section": "2. Aliasing — the whole point of reference diagrams",
     "text": "2. Aliasing — the whole point of reference diagrams\ny = x does not copy the list; both names point at the same object, so y.append(4) is visible through x. Python Tutor draws both variables with arrows to one heap box.\n\nCodeLens(\"\"\"\nx = [1, 2, 3]\ny = x\ny.append(4)\nprint(x)\n\"\"\")",
     "crumbs": [
       "Demo",
-      "`pytutor_widget` — showcase & tests"
+      "Showcase"
     ]
   },
   {
     "objectID": "pages/demo.html#objects-linked-structure",
     "href": "pages/demo.html#objects-linked-structure",
-    "title": "pytutor_widget — showcase & tests",
+    "title": "Showcase",
     "section": "3. Objects & linked structure",
     "text": "3. Objects & linked structure\nInstances render as boxes of fields; references between them become arrows — here a tiny linked list.\n\nCodeLens(\"\"\"\nclass Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.next = nxt\n\nhead = Node(1, Node(2, Node(3)))\ncur = head\ntotal = 0\nwhile cur is not None:\n    total += cur.value\n    cur = cur.next\n\"\"\", height=560)",
     "crumbs": [
       "Demo",
-      "`pytutor_widget` — showcase & tests"
+      "Showcase"
     ]
   },
   {
     "objectID": "pages/demo.html#recursion-the-call-stack-grows",
     "href": "pages/demo.html#recursion-the-call-stack-grows",
-    "title": "pytutor_widget — showcase & tests",
+    "title": "Showcase",
     "section": "4. Recursion — the call stack grows",
     "text": "4. Recursion — the call stack grows\nEach recursive call pushes a frame onto the stack; watch them stack up and unwind.\n\nCodeLens(\"\"\"\ndef fact(n):\n    if n &lt;= 1:\n        return 1\n    return n * fact(n - 1)\n\nfact(4)\n\"\"\")",
     "crumbs": [
       "Demo",
-      "`pytutor_widget` — showcase & tests"
+      "Showcase"
     ]
   },
   {
     "objectID": "pages/demo.html#nested-containers-dicts",
     "href": "pages/demo.html#nested-containers-dicts",
-    "title": "pytutor_widget — showcase & tests",
+    "title": "Showcase",
     "section": "5. Nested containers & dicts",
     "text": "5. Nested containers & dicts\n\nCodeLens(\"\"\"\nmatrix = [[1, 2], [3, 4]]\nlookup = {\"a\": matrix[0], \"b\": matrix[1]}\nmatrix[0][1] = 99\n\"\"\")",
     "crumbs": [
       "Demo",
-      "`pytutor_widget` — showcase & tests"
+      "Showcase"
     ]
   },
   {
     "objectID": "pages/demo.html#the-codelens-cell-magic",
     "href": "pages/demo.html#the-codelens-cell-magic",
-    "title": "pytutor_widget — showcase & tests",
+    "title": "Showcase",
     "section": "6. The %%codelens cell magic",
     "text": "6. The %%codelens cell magic\nImporting the package registers a cell magic, so you can visualize a whole cell directly — the closest analog to Runestone’s .. codelens:: directive.\n\n%%codelens\nnums = [3, 1, 2]\nnums.sort()\nsquared = [n * n for n in nums]\nprint(squared)",
     "crumbs": [
       "Demo",
-      "`pytutor_widget` — showcase & tests"
+      "Showcase"
     ]
   },
   {
     "objectID": "pages/demo.html#exceptions-are-traced-too",
     "href": "pages/demo.html#exceptions-are-traced-too",
-    "title": "pytutor_widget — showcase & tests",
+    "title": "Showcase",
     "section": "7. Exceptions are traced too",
     "text": "7. Exceptions are traced too\nAn uncaught error becomes a final step in the trace.\n\nCodeLens(\"\"\"\ndef risky(x):\n    return 10 / x\n\nrisky(0)\n\"\"\")",
     "crumbs": [
       "Demo",
-      "`pytutor_widget` — showcase & tests"
+      "Showcase"
     ]
   },
   {
     "objectID": "pages/demo.html#self-test-guos-exact-schema-headless",
     "href": "pages/demo.html#self-test-guos-exact-schema-headless",
-    "title": "pytutor_widget — showcase & tests",
+    "title": "Showcase",
     "section": "8. Self-test — Guo’s exact schema (headless)",
     "text": "8. Self-test — Guo’s exact schema (headless)\nRendering needs a browser, but the trace data can be validated headlessly. This asserts the trace matches Online Python Tutor’s schema: the per-step keys, REF-based aliasing, heap object tags (LIST, INSTANCE, …), the call stack, and JSON-serializability (the contract with pytutor.js).\n\nimport json\nfrom pytutor_widget import trace_code\n\nREQUIRED = {\"line\", \"event\", \"func_name\", \"globals\", \"ordered_globals\",\n            \"stack_to_render\", \"heap\", \"stdout\"}\n\nt = trace_code(\"\"\"\nx = [1, 2, 3]\ny = x\ny.append(4)\n\"\"\")\nassert set(t.keys()) == {\"code\", \"trace\"}\nassert all(REQUIRED &lt;= set(p.keys()) for p in t[\"trace\"])\nassert {\"step_line\"} &lt;= {p[\"event\"] for p in t[\"trace\"]}\n\nlast = t[\"trace\"][-1]\ngx, gy = last[\"globals\"][\"x\"], last[\"globals\"][\"y\"]\nassert gx[0] == \"REF\" and gx == gy, \"aliasing: x and y must share one heap id\"\nassert last[\"heap\"][gx[1]][0] == \"LIST\"\nassert last[\"heap\"][gx[1]][1:] == [1, 2, 3, 4]\n\n# instance object encodes as INSTANCE with a class name + fields\nti = trace_code(\"class P:\\n    def __init__(s): s.x = 1\\np = P()\")\nli = ti[\"trace\"][-1]\ninst = li[\"heap\"][li[\"globals\"][\"p\"][1]]\nassert inst[0] == \"INSTANCE\" and inst[1] == \"P\"\n\n# recursion produces a growing stack_to_render\ntr = trace_code(\"def f(n):\\n    if n&lt;=1: return 1\\n    return n*f(n-1)\\nf(4)\")\nassert max(len(p[\"stack_to_render\"]) for p in tr[\"trace\"]) &gt;= 4\n\n# whole thing is JSON-serializable (heap int keys -&gt; string keys, as pytutor.js expects)\nrt = json.loads(json.dumps(t))\nassert all(isinstance(k, str) for k in rt[\"trace\"][-1][\"heap\"])\n\nprint(\"All schema self-tests passed.\")\nprint(\"insertion-trace points:\", len(t[\"trace\"]),\n      \"| events:\", sorted({p[\"event\"] for p in t[\"trace\"]}))",
     "crumbs": [
       "Demo",
-      "`pytutor_widget` — showcase & tests"
+      "Showcase"
     ]
   },
   {
@@ -144,7 +144,7 @@
     "href": "pages/overview.html#installation",
     "title": "Overview",
     "section": "Installation",
-    "text": "Installation\n\npixicondapip\n\n\npixi workspace channel add munch-group\npixi add pytutor-widget\n\n\nconda install -c munch-group pytutor-widget\n\n\npip install pytutor-widget\n\n\n\n\nfrom pytutor_widget import Turtle\n\nt = Turtle()\nt.speed(6)\nfor _ in range(4):     # a square\n    t.forward(120)\n    t.left(90)",
+    "text": "Installation\n\npixicondapip\n\n\npixi workspace channel add munch-group\npixi add pytutor-widget\n\n\nconda install -c munch-group pytutor-widget\n\n\npip install pytutor-widget\n\n\n\n\nimport pytutor_widget\n\n\n%%codelens\ndef insertion_sort(a):\n    for i in range(1, len(a)):\n        key = a[i]\n        j = i - 1\n        while j &gt;= 0 and a[j] &gt; key:\n            a[j + 1] = a[j]\n            j -= 1\n        a[j + 1] = key\n    return a\n\ndata = [5, 2, 9, 1]\ninsertion_sort(data)",
     "crumbs": [
       "Overview"
     ]

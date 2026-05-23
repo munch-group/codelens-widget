@@ -181,7 +181,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/demo.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">`pytutor_widget` — showcase &amp; tests</span></a>
+ <span class="menu-text">Showcase</span></a>
   </div>
 </li>
       </ul>
@@ -243,13 +243,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div id="cell-2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-12-19T10:49:18.325514Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-12-19T10:49:18.325385Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-12-19T10:49:18.328136Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-12-19T10:49:18.327679Z&quot;}}">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pytutor_widget <span class="im">import</span> Turtle</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> Turtle()</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>t.speed(<span class="dv">6</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>):     <span class="co"># a square</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    t.forward(<span class="dv">120</span>)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    t.left(<span class="dv">90</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pytutor_widget</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="cell-3" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>codelens</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> insertion_sort(a):</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(a)):</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> a[i]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        j <span class="op">=</span> i <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> j <span class="op">&gt;=</span> <span class="dv">0</span> <span class="kw">and</span> a[j] <span class="op">&gt;</span> key:</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            a[j <span class="op">+</span> <span class="dv">1</span>] <span class="op">=</span> a[j]</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            j <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        a[j <span class="op">+</span> <span class="dv">1</span>] <span class="op">=</span> key</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> [<span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">9</span>, <span class="dv">1</span>]</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>insertion_sort(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="learning-more" class="level2">
@@ -667,8 +676,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../pages/demo.html" class="pagination-link" aria-label="`pytutor_widget` — showcase &amp; tests">
-        <span class="nav-page-text"><code>pytutor_widget</code> — showcase &amp; tests</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../pages/demo.html" class="pagination-link" aria-label="Showcase">
+        <span class="nav-page-text">Showcase</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

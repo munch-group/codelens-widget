@@ -1,35 +1,132 @@
 [
   {
-    "objectID": "pages/example.html",
-    "href": "pages/example.html",
-    "title": "Workplace interaction",
+    "objectID": "pages/demo.html",
+    "href": "pages/demo.html",
+    "title": "pytutor_widget — showcase & tests",
     "section": "",
-    "text": "%load_ext autoreload\n%autoreload 2\nImport some plotting libraries and set some defaults:\nimport sys\nimport numpy as np\nimport pandas as pd\nfrom IPython.display import display, Markdown\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nsns.set()\nsns.set_style(\"whitegrid\")\nnp.random.seed(42)\n%config InlineBackend.figure_formats = ['svg']",
+    "text": "A CodeLens-style execution visualizer that uses Philip Guo’s real Online Python Tutor frontend (pytutor.js). The execution trace is generated in the live kernel by Guo’s own pg_logger (vendored, MIT), so it is in his exact schema, and rendered by pytutor.js inside a self-contained &lt;iframe&gt; — step through with the forward/back buttons, inspect the call stack, and watch the heap drawn as reference diagrams with pointer arrows.\nEverything is vendored under pytutor_widget/vendor/, so it runs fully offline and the same way in VS Code, JupyterLab, Notebook 7, and Colab.\nfrom pytutor_widget import CodeLens",
     "crumbs": [
-      "Examples",
-      "Workplace interaction"
+      "Demo",
+      "`pytutor_widget` — showcase & tests"
     ]
   },
   {
-    "objectID": "pages/example.html#sampling",
-    "href": "pages/example.html#sampling",
-    "title": "Workplace interaction",
-    "section": "Sampling",
-    "text": "Sampling\n\nsubjects = pd.read_csv('../../data/data_table.csv')\nsample_size = subjects.shape[0]\n\n\nTip:\nBy adding a label and caption to a cell displaying a table, you can refer to that table elsewhere and insert it in a manuscript.\n\n\nsubjects\n\n\n\nTable 1: People included in the analysis.\n\n\n\n\n\n\n\n\n\n\nname\nage\nsex\nposition\nnationality\n\n\n\n\n0\nJulie\n27\nF\nPhDstudent\nDK\n\n\n1\nThomas\n33\nM\nPostdoc\nGB\n\n\n2\nEmilie\n23\nF\nPhDstudent\nCH\n\n\n3\nSofie\n31\nF\nPostdoc\nDK\n\n\n4\nSara\n29\nF\nPostdoc\nUS\n\n\n5\nCecilie\n34\nF\nPostdoc\nDK\n\n\n6\nAnders\n32\nM\nPhDstudent\nUK\n\n\n7\nEmma\n42\nF\nProfessor\nDK\n\n\n8\nCaroline\n31\nF\nPhDstudent\nDK\n\n\n9\nLaura\n30\nF\nPostdoc\nDK\n\n\n10\nMikkel\n33\nM\nPostdoc\nNL\n\n\n11\nJens\n27\nM\nPhDstudent\nDK\n\n\n12\nAndreas\n29\nM\nPhDstudent\nDK\n\n\n13\nJakob\n28\nM\nPhDstudent\nDK\n\n\n14\nMathilde\n61\nF\nProfessor\nDK\n\n\n15\nKatrine\n35\nF\nPostdoc\nDK\n\n\n16\nPoul\n30\nM\nPostdoc\nDK\n\n\n17\nAnna\n26\nF\nPhDstudent\nDK\n\n\n18\nPeter\n42\nM\nProfessor\nGB\n\n\n19\nIda\n53\nF\nPostdoc\nDK\n\n\n20\nFreja\n30\nF\nPostdoc\nDK\n\n\n21\nMaria\n39\nF\nProfessor\nUK\n\n\n22\nAmalie\n29\nF\nPhDstudent\nDK\n\n\n23\nCamilla\n35\nF\nPostdoc\nDK\n\n\n\n\n\n\n\n\n\n\n\nTip:\nBy generaing markdown for descriptions that will eventually end up in the manuscript, you can imbed python values. It also ensures that the manuscript exactly reflects the notebook.\n\n\n\nThe 24 subjects from workplaces in Denmark were interviewed …. blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
+    "objectID": "pages/demo.html#insertion-sort",
+    "href": "pages/demo.html#insertion-sort",
+    "title": "pytutor_widget — showcase & tests",
+    "section": "1. Insertion sort",
+    "text": "1. Insertion sort\nThe canonical CodeLens example. Step through with the buttons; the in-place swaps mutate the same list object on the heap.\n\n%%codelens\ndef insertion_sort(a):\n    for i in range(1, len(a)):\n        key = a[i]\n        j = i - 1\n        while j &gt;= 0 and a[j] &gt; key:\n            a[j + 1] = a[j]\n            j -= 1\n        a[j + 1] = key\n    return a\n\ndata = [5, 2, 9, 1]\ninsertion_sort(data)\n\n\n\n\n\nCodeLens(\"\"\"\ndef insertion_sort(a):\n    for i in range(1, len(a)):\n        key = a[i]\n        j = i - 1\n        while j &gt;= 0 and a[j] &gt; key:\n            a[j + 1] = a[j]\n            j -= 1\n        a[j + 1] = key\n    return a\n\ndata = [5, 2, 9, 1]\ninsertion_sort(data)\n\"\"\")",
     "crumbs": [
-      "Examples",
-      "Workplace interaction"
+      "Demo",
+      "`pytutor_widget` — showcase & tests"
     ]
   },
   {
-    "objectID": "pages/example.html#interviews",
-    "href": "pages/example.html#interviews",
-    "title": "Workplace interaction",
-    "section": "Interviews",
-    "text": "Interviews\nIn interviewed {python} sample_size workplace individuals were interviewed by …. blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah,\n\n\n#| label: tbl-measured-informality\n#| tbl-cap: \"Informality quantified for subjects in the study.\"\n\ndf = pd.DataFrame({'name': subjects.name, \n                   'seniority': np.random.randint(0, 5, sample_size), \n                   'age': subjects.age})\ndf['informality'] = np.random.normal(loc=10, scale=1, size=sample_size)\ndf\n\n\n\n\n\n\n\n\nname\nseniority\nage\ninformality\n\n\n\n\n0\nJulie\n3\n27\n10.816445\n\n\n1\nThomas\n4\n33\n8.476124\n\n\n2\nEmilie\n2\n23\n9.571954\n\n\n3\nSofie\n4\n31\n9.257593\n\n\n4\nSara\n4\n29\n9.296656\n\n\n5\nCecilie\n1\n34\n7.860379\n\n\n6\nAnders\n2\n32\n9.370525\n\n\n7\nEmma\n2\n42\n10.597720\n\n\n8\nCaroline\n2\n31\n12.559488\n\n\n9\nLaura\n4\n30\n10.394233\n\n\n10\nMikkel\n3\n33\n10.122219\n\n\n11\nJens\n2\n27\n9.484564\n\n\n12\nAndreas\n4\n29\n9.399746\n\n\n13\nJakob\n1\n28\n10.947440\n\n\n14\nMathilde\n3\n61\n10.291034\n\n\n15\nKatrine\n1\n35\n9.364440\n\n\n16\nPoul\n3\n30\n8.978448\n\n\n17\nAnna\n4\n26\n9.838245\n\n\n18\nPeter\n0\n42\n9.466351\n\n\n19\nIda\n3\n53\n9.994472\n\n\n20\nFreja\n1\n30\n9.770550\n\n\n21\nMaria\n4\n39\n10.389349\n\n\n22\nAmalie\n3\n29\n8.734881\n\n\n23\nCamilla\n0\n35\n11.091992\n\n\n\n\n\n\n\n\ndf.groupby(['seniority']).mean(numeric_only=True).reset_index()\n\n\n\nTable 2: Mean interaction scores by seniority and age\n\n\n\n\n\n\n\n\n\n\nseniority\nage\ninformality\n\n\n\n\n0\n0\n38.500000\n10.279172\n\n\n1\n1\n31.750000\n9.485702\n\n\n2\n2\n31.000000\n10.316850\n\n\n3\n3\n38.833333\n9.822917\n\n\n4\n4\n31.000000\n9.578849\n\n\n\n\n\n\n\n\n\n\n\nsns.scatterplot(x='age', y='informality', data=df, hue='seniority', palette='viridis')\nplt.ylabel('How informal you can be')\nplt.xlabel('Age')\nplt.legend(title='Seniority', loc='lower right', labels=['Undergrad', 'Postgrad', 'PhD', 'Postdoc', 'Professor'])\nplt.ylim(bottom=0) ;\n\n\n\n\n\n\n\nFigure 1: Interaction among Danes: How Danes interact is has very little to do with age and seniority, compared to most other contries.\n\n\n\n\n\nSeems Danish people act very informally unaffected by age and seniority.\n\ninformality_age_cor = df.informality.corr(df.age)\ninformality_age_cor\n\nnp.float64(0.10942859782514087)\n\n\n\ninformality_seniority_cor = df.informality.corr(df.seniority)\ninformality_seniority_cor\n\nnp.float64(-0.13673439318448927)\n\n\n\n\nThe correlation between informality and age was 0.109 and the correlation between informality and seniority was -0.137.\n\n\n\nsns.lmplot(x='age', y='informality', data=df, hue='seniority', palette='viridis')\nplt.ylabel('How informal you can be')\nplt.xlabel('Age') ;\n\n\n\n\n\n\n\nFigure 2: Interaction among Danes: Regressions of informality against age for five levels of seniority.",
+    "objectID": "pages/demo.html#aliasing-the-whole-point-of-reference-diagrams",
+    "href": "pages/demo.html#aliasing-the-whole-point-of-reference-diagrams",
+    "title": "pytutor_widget — showcase & tests",
+    "section": "2. Aliasing — the whole point of reference diagrams",
+    "text": "2. Aliasing — the whole point of reference diagrams\ny = x does not copy the list; both names point at the same object, so y.append(4) is visible through x. Python Tutor draws both variables with arrows to one heap box.\n\nCodeLens(\"\"\"\nx = [1, 2, 3]\ny = x\ny.append(4)\nprint(x)\n\"\"\")",
     "crumbs": [
-      "Examples",
-      "Workplace interaction"
+      "Demo",
+      "`pytutor_widget` — showcase & tests"
+    ]
+  },
+  {
+    "objectID": "pages/demo.html#objects-linked-structure",
+    "href": "pages/demo.html#objects-linked-structure",
+    "title": "pytutor_widget — showcase & tests",
+    "section": "3. Objects & linked structure",
+    "text": "3. Objects & linked structure\nInstances render as boxes of fields; references between them become arrows — here a tiny linked list.\n\nCodeLens(\"\"\"\nclass Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.next = nxt\n\nhead = Node(1, Node(2, Node(3)))\ncur = head\ntotal = 0\nwhile cur is not None:\n    total += cur.value\n    cur = cur.next\n\"\"\", height=560)",
+    "crumbs": [
+      "Demo",
+      "`pytutor_widget` — showcase & tests"
+    ]
+  },
+  {
+    "objectID": "pages/demo.html#recursion-the-call-stack-grows",
+    "href": "pages/demo.html#recursion-the-call-stack-grows",
+    "title": "pytutor_widget — showcase & tests",
+    "section": "4. Recursion — the call stack grows",
+    "text": "4. Recursion — the call stack grows\nEach recursive call pushes a frame onto the stack; watch them stack up and unwind.\n\nCodeLens(\"\"\"\ndef fact(n):\n    if n &lt;= 1:\n        return 1\n    return n * fact(n - 1)\n\nfact(4)\n\"\"\")",
+    "crumbs": [
+      "Demo",
+      "`pytutor_widget` — showcase & tests"
+    ]
+  },
+  {
+    "objectID": "pages/demo.html#nested-containers-dicts",
+    "href": "pages/demo.html#nested-containers-dicts",
+    "title": "pytutor_widget — showcase & tests",
+    "section": "5. Nested containers & dicts",
+    "text": "5. Nested containers & dicts\n\nCodeLens(\"\"\"\nmatrix = [[1, 2], [3, 4]]\nlookup = {\"a\": matrix[0], \"b\": matrix[1]}\nmatrix[0][1] = 99\n\"\"\")",
+    "crumbs": [
+      "Demo",
+      "`pytutor_widget` — showcase & tests"
+    ]
+  },
+  {
+    "objectID": "pages/demo.html#the-codelens-cell-magic",
+    "href": "pages/demo.html#the-codelens-cell-magic",
+    "title": "pytutor_widget — showcase & tests",
+    "section": "6. The %%codelens cell magic",
+    "text": "6. The %%codelens cell magic\nImporting the package registers a cell magic, so you can visualize a whole cell directly — the closest analog to Runestone’s .. codelens:: directive.\n\n%%codelens\nnums = [3, 1, 2]\nnums.sort()\nsquared = [n * n for n in nums]\nprint(squared)",
+    "crumbs": [
+      "Demo",
+      "`pytutor_widget` — showcase & tests"
+    ]
+  },
+  {
+    "objectID": "pages/demo.html#exceptions-are-traced-too",
+    "href": "pages/demo.html#exceptions-are-traced-too",
+    "title": "pytutor_widget — showcase & tests",
+    "section": "7. Exceptions are traced too",
+    "text": "7. Exceptions are traced too\nAn uncaught error becomes a final step in the trace.\n\nCodeLens(\"\"\"\ndef risky(x):\n    return 10 / x\n\nrisky(0)\n\"\"\")",
+    "crumbs": [
+      "Demo",
+      "`pytutor_widget` — showcase & tests"
+    ]
+  },
+  {
+    "objectID": "pages/demo.html#self-test-guos-exact-schema-headless",
+    "href": "pages/demo.html#self-test-guos-exact-schema-headless",
+    "title": "pytutor_widget — showcase & tests",
+    "section": "8. Self-test — Guo’s exact schema (headless)",
+    "text": "8. Self-test — Guo’s exact schema (headless)\nRendering needs a browser, but the trace data can be validated headlessly. This asserts the trace matches Online Python Tutor’s schema: the per-step keys, REF-based aliasing, heap object tags (LIST, INSTANCE, …), the call stack, and JSON-serializability (the contract with pytutor.js).\n\nimport json\nfrom pytutor_widget import trace_code\n\nREQUIRED = {\"line\", \"event\", \"func_name\", \"globals\", \"ordered_globals\",\n            \"stack_to_render\", \"heap\", \"stdout\"}\n\nt = trace_code(\"\"\"\nx = [1, 2, 3]\ny = x\ny.append(4)\n\"\"\")\nassert set(t.keys()) == {\"code\", \"trace\"}\nassert all(REQUIRED &lt;= set(p.keys()) for p in t[\"trace\"])\nassert {\"step_line\"} &lt;= {p[\"event\"] for p in t[\"trace\"]}\n\nlast = t[\"trace\"][-1]\ngx, gy = last[\"globals\"][\"x\"], last[\"globals\"][\"y\"]\nassert gx[0] == \"REF\" and gx == gy, \"aliasing: x and y must share one heap id\"\nassert last[\"heap\"][gx[1]][0] == \"LIST\"\nassert last[\"heap\"][gx[1]][1:] == [1, 2, 3, 4]\n\n# instance object encodes as INSTANCE with a class name + fields\nti = trace_code(\"class P:\\n    def __init__(s): s.x = 1\\np = P()\")\nli = ti[\"trace\"][-1]\ninst = li[\"heap\"][li[\"globals\"][\"p\"][1]]\nassert inst[0] == \"INSTANCE\" and inst[1] == \"P\"\n\n# recursion produces a growing stack_to_render\ntr = trace_code(\"def f(n):\\n    if n&lt;=1: return 1\\n    return n*f(n-1)\\nf(4)\")\nassert max(len(p[\"stack_to_render\"]) for p in tr[\"trace\"]) &gt;= 4\n\n# whole thing is JSON-serializable (heap int keys -&gt; string keys, as pytutor.js expects)\nrt = json.loads(json.dumps(t))\nassert all(isinstance(k, str) for k in rt[\"trace\"][-1][\"heap\"])\n\nprint(\"All schema self-tests passed.\")\nprint(\"insertion-trace points:\", len(t[\"trace\"]),\n      \"| events:\", sorted({p[\"event\"] for p in t[\"trace\"]}))",
+    "crumbs": [
+      "Demo",
+      "`pytutor_widget` — showcase & tests"
+    ]
+  },
+  {
+    "objectID": "api/index.html",
+    "href": "api/index.html",
+    "title": "Function reference",
+    "section": "",
+    "text": "Some description…",
+    "crumbs": [
+      "Function reference"
+    ]
+  },
+  {
+    "objectID": "api/index.html#some-section",
+    "href": "api/index.html#some-section",
+    "title": "Function reference",
+    "section": "",
+    "text": "Some description…",
+    "crumbs": [
+      "Function reference"
+    ]
+  },
+  {
+    "objectID": "api/CodeLens.html",
+    "href": "api/CodeLens.html",
+    "title": "CodeLens",
+    "section": "",
+    "text": "CodeLens\npytutor_widget.CodeLens(\n    code,\n    height=520,\n    lang='py3',\n    options=None,\n    cumulative_mode=False,\n    heap_primitives=False,\n)",
+    "crumbs": [
+      "Some section",
+      "CodeLens"
     ]
   },
   {
@@ -61,99 +158,5 @@
     "crumbs": [
       "Overview"
     ]
-  },
-  {
-    "objectID": "api/CodeLens.html",
-    "href": "api/CodeLens.html",
-    "title": "CodeLens",
-    "section": "",
-    "text": "CodeLens\npytutor_widget.CodeLens(\n    code,\n    height=520,\n    lang='py3',\n    options=None,\n    cumulative_mode=False,\n    heap_primitives=False,\n)",
-    "crumbs": [
-      "Some section",
-      "CodeLens"
-    ]
-  },
-  {
-    "objectID": "api/index.html",
-    "href": "api/index.html",
-    "title": "Function reference",
-    "section": "",
-    "text": "Some description…",
-    "crumbs": [
-      "Function reference"
-    ]
-  },
-  {
-    "objectID": "api/index.html#some-section",
-    "href": "api/index.html#some-section",
-    "title": "Function reference",
-    "section": "",
-    "text": "Some description…",
-    "crumbs": [
-      "Function reference"
-    ]
-  },
-  {
-    "objectID": "pages/demo.html",
-    "href": "pages/demo.html",
-    "title": "pytutor_widget — showcase & tests",
-    "section": "",
-    "text": "A CodeLens-style execution visualizer that uses Philip Guo’s real Online Python Tutor frontend (pytutor.js). The execution trace is generated in the live kernel by Guo’s own pg_logger (vendored, MIT), so it is in his exact schema, and rendered by pytutor.js inside a self-contained &lt;iframe&gt; — step through with the forward/back buttons, inspect the call stack, and watch the heap drawn as reference diagrams with pointer arrows.\nEverything is vendored under pytutor_widget/vendor/, so it runs fully offline and the same way in VS Code, JupyterLab, Notebook 7, and Colab.\nfrom pytutor_widget import CodeLens"
-  },
-  {
-    "objectID": "pages/demo.html#insertion-sort",
-    "href": "pages/demo.html#insertion-sort",
-    "title": "pytutor_widget — showcase & tests",
-    "section": "1. Insertion sort",
-    "text": "1. Insertion sort\nThe canonical CodeLens example. Step through with the buttons; the in-place swaps mutate the same list object on the heap.\n\n%%codelens\ndef insertion_sort(a):\n    for i in range(1, len(a)):\n        key = a[i]\n        j = i - 1\n        while j &gt;= 0 and a[j] &gt; key:\n            a[j + 1] = a[j]\n            j -= 1\n        a[j + 1] = key\n    return a\n\ndata = [5, 2, 9, 1]\ninsertion_sort(data)\n\n\n\n\n\nCodeLens(\"\"\"\ndef insertion_sort(a):\n    for i in range(1, len(a)):\n        key = a[i]\n        j = i - 1\n        while j &gt;= 0 and a[j] &gt; key:\n            a[j + 1] = a[j]\n            j -= 1\n        a[j + 1] = key\n    return a\n\ndata = [5, 2, 9, 1]\ninsertion_sort(data)\n\"\"\")"
-  },
-  {
-    "objectID": "pages/demo.html#aliasing-the-whole-point-of-reference-diagrams",
-    "href": "pages/demo.html#aliasing-the-whole-point-of-reference-diagrams",
-    "title": "pytutor_widget — showcase & tests",
-    "section": "2. Aliasing — the whole point of reference diagrams",
-    "text": "2. Aliasing — the whole point of reference diagrams\ny = x does not copy the list; both names point at the same object, so y.append(4) is visible through x. Python Tutor draws both variables with arrows to one heap box.\n\nCodeLens(\"\"\"\nx = [1, 2, 3]\ny = x\ny.append(4)\nprint(x)\n\"\"\")"
-  },
-  {
-    "objectID": "pages/demo.html#objects-linked-structure",
-    "href": "pages/demo.html#objects-linked-structure",
-    "title": "pytutor_widget — showcase & tests",
-    "section": "3. Objects & linked structure",
-    "text": "3. Objects & linked structure\nInstances render as boxes of fields; references between them become arrows — here a tiny linked list.\n\nCodeLens(\"\"\"\nclass Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.next = nxt\n\nhead = Node(1, Node(2, Node(3)))\ncur = head\ntotal = 0\nwhile cur is not None:\n    total += cur.value\n    cur = cur.next\n\"\"\", height=560)"
-  },
-  {
-    "objectID": "pages/demo.html#recursion-the-call-stack-grows",
-    "href": "pages/demo.html#recursion-the-call-stack-grows",
-    "title": "pytutor_widget — showcase & tests",
-    "section": "4. Recursion — the call stack grows",
-    "text": "4. Recursion — the call stack grows\nEach recursive call pushes a frame onto the stack; watch them stack up and unwind.\n\nCodeLens(\"\"\"\ndef fact(n):\n    if n &lt;= 1:\n        return 1\n    return n * fact(n - 1)\n\nfact(4)\n\"\"\")"
-  },
-  {
-    "objectID": "pages/demo.html#nested-containers-dicts",
-    "href": "pages/demo.html#nested-containers-dicts",
-    "title": "pytutor_widget — showcase & tests",
-    "section": "5. Nested containers & dicts",
-    "text": "5. Nested containers & dicts\n\nCodeLens(\"\"\"\nmatrix = [[1, 2], [3, 4]]\nlookup = {\"a\": matrix[0], \"b\": matrix[1]}\nmatrix[0][1] = 99\n\"\"\")"
-  },
-  {
-    "objectID": "pages/demo.html#the-codelens-cell-magic",
-    "href": "pages/demo.html#the-codelens-cell-magic",
-    "title": "pytutor_widget — showcase & tests",
-    "section": "6. The %%codelens cell magic",
-    "text": "6. The %%codelens cell magic\nImporting the package registers a cell magic, so you can visualize a whole cell directly — the closest analog to Runestone’s .. codelens:: directive.\n\n%%codelens\nnums = [3, 1, 2]\nnums.sort()\nsquared = [n * n for n in nums]\nprint(squared)"
-  },
-  {
-    "objectID": "pages/demo.html#exceptions-are-traced-too",
-    "href": "pages/demo.html#exceptions-are-traced-too",
-    "title": "pytutor_widget — showcase & tests",
-    "section": "7. Exceptions are traced too",
-    "text": "7. Exceptions are traced too\nAn uncaught error becomes a final step in the trace.\n\nCodeLens(\"\"\"\ndef risky(x):\n    return 10 / x\n\nrisky(0)\n\"\"\")"
-  },
-  {
-    "objectID": "pages/demo.html#self-test-guos-exact-schema-headless",
-    "href": "pages/demo.html#self-test-guos-exact-schema-headless",
-    "title": "pytutor_widget — showcase & tests",
-    "section": "8. Self-test — Guo’s exact schema (headless)",
-    "text": "8. Self-test — Guo’s exact schema (headless)\nRendering needs a browser, but the trace data can be validated headlessly. This asserts the trace matches Online Python Tutor’s schema: the per-step keys, REF-based aliasing, heap object tags (LIST, INSTANCE, …), the call stack, and JSON-serializability (the contract with pytutor.js).\n\nimport json\nfrom pytutor_widget import trace_code\n\nREQUIRED = {\"line\", \"event\", \"func_name\", \"globals\", \"ordered_globals\",\n            \"stack_to_render\", \"heap\", \"stdout\"}\n\nt = trace_code(\"\"\"\nx = [1, 2, 3]\ny = x\ny.append(4)\n\"\"\")\nassert set(t.keys()) == {\"code\", \"trace\"}\nassert all(REQUIRED &lt;= set(p.keys()) for p in t[\"trace\"])\nassert {\"step_line\"} &lt;= {p[\"event\"] for p in t[\"trace\"]}\n\nlast = t[\"trace\"][-1]\ngx, gy = last[\"globals\"][\"x\"], last[\"globals\"][\"y\"]\nassert gx[0] == \"REF\" and gx == gy, \"aliasing: x and y must share one heap id\"\nassert last[\"heap\"][gx[1]][0] == \"LIST\"\nassert last[\"heap\"][gx[1]][1:] == [1, 2, 3, 4]\n\n# instance object encodes as INSTANCE with a class name + fields\nti = trace_code(\"class P:\\n    def __init__(s): s.x = 1\\np = P()\")\nli = ti[\"trace\"][-1]\ninst = li[\"heap\"][li[\"globals\"][\"p\"][1]]\nassert inst[0] == \"INSTANCE\" and inst[1] == \"P\"\n\n# recursion produces a growing stack_to_render\ntr = trace_code(\"def f(n):\\n    if n&lt;=1: return 1\\n    return n*f(n-1)\\nf(4)\")\nassert max(len(p[\"stack_to_render\"]) for p in tr[\"trace\"]) &gt;= 4\n\n# whole thing is JSON-serializable (heap int keys -&gt; string keys, as pytutor.js expects)\nrt = json.loads(json.dumps(t))\nassert all(isinstance(k, str) for k in rt[\"trace\"][-1][\"heap\"])\n\nprint(\"All schema self-tests passed.\")\nprint(\"insertion-trace points:\", len(t[\"trace\"]),\n      \"| events:\", sorted({p[\"event\"] for p in t[\"trace\"]}))"
   }
 ]

@@ -134,7 +134,7 @@
     "href": "pages/overview.html",
     "title": "Overview",
     "section": "",
-    "text": "codelens-widget is an animated, turtle-compatible drawing widget for Jupyter notebooks. You write ordinary turtle code in Python; the widget records each command and replays it as a smooth canvas animation right below the cell.\nBuilt on anywidget, it behaves identically in VS Code, JupyterLab, Notebook 7, and Colab, and works offline.",
+    "text": "codelens-widget brings the CodeLens Tool used Python Tutor to the Jupyter Notebook as a widget triggered by a %%codelens cell magic.\nBuilt on anywidget, it behaves identically in VS Code, JupyterLab, Notebook 7, and Colab, and works offline.",
     "crumbs": [
       "Overview"
     ]

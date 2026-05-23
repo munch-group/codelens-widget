@@ -74,53 +74,11 @@
     ]
   },
   {
-    "objectID": "api/functionname.html",
-    "href": "api/functionname.html",
-    "title": "functionname",
-    "section": "",
-    "text": "pytutor_widget.modulename.functionname(x=1, y=1)\nThe sum of two numbers.\n\n\n\nx : int = 1\n\nThe first number\n\ny : int = 1\n\nThe second number.\n\n\n\n\n\n\n : int\n\nSum of two numbers.\n\n\n\n\n\nAdding two numbers\nresult = foo(2, 4)\n\n\n\nlibraryname.modulename.scriptname"
-  },
-  {
-    "objectID": "api/functionname.html#parameters",
-    "href": "api/functionname.html#parameters",
-    "title": "functionname",
-    "section": "",
-    "text": "x : int = 1\n\nThe first number\n\ny : int = 1\n\nThe second number."
-  },
-  {
-    "objectID": "api/functionname.html#returns",
-    "href": "api/functionname.html#returns",
-    "title": "functionname",
-    "section": "",
-    "text": ": int\n\nSum of two numbers."
-  },
-  {
-    "objectID": "api/functionname.html#examples",
-    "href": "api/functionname.html#examples",
-    "title": "functionname",
-    "section": "",
-    "text": "Adding two numbers\nresult = foo(2, 4)"
-  },
-  {
-    "objectID": "api/functionname.html#see-also",
-    "href": "api/functionname.html#see-also",
-    "title": "functionname",
-    "section": "",
-    "text": "libraryname.modulename.scriptname"
-  },
-  {
-    "objectID": "api/scriptname.html",
-    "href": "api/scriptname.html",
-    "title": "scriptname",
-    "section": "",
-    "text": "scriptname\npytutor_widget.modulename.scriptname()"
-  },
-  {
     "objectID": "api/index.html",
     "href": "api/index.html",
     "title": "Function reference",
     "section": "",
-    "text": "Some description…\n\n\n\nCodeLens",
+    "text": "Some description…",
     "crumbs": [
       "Function reference"
     ]
@@ -130,7 +88,7 @@
     "href": "api/index.html#some-section",
     "title": "Function reference",
     "section": "",
-    "text": "Some description…\n\n\n\nCodeLens",
+    "text": "Some description…",
     "crumbs": [
       "Function reference"
     ]
@@ -147,7 +105,7 @@
     "href": "pages/demo.html#insertion-sort",
     "title": "pytutor_widget — showcase & tests",
     "section": "1. Insertion sort",
-    "text": "1. Insertion sort\nThe canonical CodeLens example. Step through with the buttons; the in-place swaps mutate the same list object on the heap.\n\nCodeLens(\"\"\"\ndef insertion_sort(a):\n    for i in range(1, len(a)):\n        key = a[i]\n        j = i - 1\n        while j &gt;= 0 and a[j] &gt; key:\n            a[j + 1] = a[j]\n            j -= 1\n        a[j + 1] = key\n    return a\n\ndata = [5, 2, 9, 1]\ninsertion_sort(data)\n\"\"\")"
+    "text": "1. Insertion sort\nThe canonical CodeLens example. Step through with the buttons; the in-place swaps mutate the same list object on the heap.\n\n%%codelens\ndef insertion_sort(a):\n    for i in range(1, len(a)):\n        key = a[i]\n        j = i - 1\n        while j &gt;= 0 and a[j] &gt; key:\n            a[j + 1] = a[j]\n            j -= 1\n        a[j + 1] = key\n    return a\n\ndata = [5, 2, 9, 1]\ninsertion_sort(data)\n\n\n\n\n\nCodeLens(\"\"\"\ndef insertion_sort(a):\n    for i in range(1, len(a)):\n        key = a[i]\n        j = i - 1\n        while j &gt;= 0 and a[j] &gt; key:\n            a[j + 1] = a[j]\n            j -= 1\n        a[j + 1] = key\n    return a\n\ndata = [5, 2, 9, 1]\ninsertion_sort(data)\n\"\"\")"
   },
   {
     "objectID": "pages/demo.html#aliasing-the-whole-point-of-reference-diagrams",

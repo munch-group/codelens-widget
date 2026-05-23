@@ -90,14 +90,8 @@ quartodoc:
 
   sections:
     - title: Some section
-      package: pytutor_widget.modulename
+      package: pytutor_widget
       desc: |
         Some description...
       contents:
-        - functionname
-    - title: Some other section
-      package: pytutor_widget.modulename
-      desc: |
-        Some description...
-      contents:
-        - scriptname
+        - CodeLens

@@ -7,13 +7,4 @@ Some description...
 
 | | |
 | --- | --- |
-| [functionname](functionname.qmd#pytutor_widget.modulename.functionname) | The sum of two numbers. |
-
-## Some other section
-
-Some description...
-
-
-| | |
-| --- | --- |
-| [scriptname](scriptname.qmd#pytutor_widget.modulename.scriptname) |  |
+| [CodeLens](CodeLens.qmd#pytutor_widget.CodeLens) |  |

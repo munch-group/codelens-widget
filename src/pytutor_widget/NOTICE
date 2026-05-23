@@ -12,5 +12,5 @@ Vendored files retain their original MIT license headers:
     vendor/jquery-ui.* , vendor/jquery.qtip.*  (third-party libraries OPT depends on,
     under their respective MIT/permissive licenses)
 
-The pytutor_widget wrapper code (__init__.py and this packaging) only adapts and
+The codelens_widget wrapper code (__init__.py and this packaging) only adapts and
 embeds the above; it makes no claim over the vendored works.

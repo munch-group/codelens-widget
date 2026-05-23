@@ -1,5 +1,5 @@
 # Sphinx inventory version 2
-# Project: pytutor-widget
+# Project: codelens-widget
 # Version: 0.0.9999
 # The remainder of this file is compressed using zlib.
-pytutor_widget.CodeLens py:class 1 api/CodeLens.html#pytutor_widget.CodeLens -
+codelens_widget.CodeLens py:class 1 api/CodeLens.html#codelens_widget.CodeLens -

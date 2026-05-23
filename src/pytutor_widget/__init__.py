@@ -1,5 +1,5 @@
 """
-pytutor_widget
+codelens_widget
 ================
 
 A CodeLens-style execution visualizer for Jupyter that uses **Philip Guo's real
@@ -13,7 +13,7 @@ VS Code, JupyterLab, Notebook 7, and Colab.
 
 Usage
 -----
-    from pytutor_widget import CodeLens
+    from codelens_widget import CodeLens
 
     CodeLens('''
     def insertion_sort(a):

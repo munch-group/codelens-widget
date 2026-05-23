@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Project context for `pytutor_widget` — a CodeLens / Python-Tutor execution
+Project context for `codelens_widget` — a CodeLens / Python-Tutor execution
 visualizer for Jupyter that emits **Philip Guo's exact trace schema** and renders
 it with his **real `pytutor.js`** frontend, embedded in a self-contained iframe.
 
@@ -10,7 +10,7 @@ There are two execution-visualizer approaches in this lineage:
 
 - `codelens_widget.py` (sibling): a *custom* dependency-free tracer + hand-rolled
   stepper. Light, offline, but a from-scratch renderer.
-- `pytutor_widget/` (this package, under `src/`): emits **Guo's exact `{code, trace}` schema**
+- `codelens_widget/` (this package, under `src/`): emits **Guo's exact `{code, trace}` schema**
   via his vendored `pg_logger`, and renders with the **real Online Python Tutor
   frontend**. You inherit OPT's battle-tested reference diagrams (jsPlumb arrows,
   nested heap layout) at the cost of bundling its legacy JS stack.
@@ -21,7 +21,7 @@ a minimal, fully self-authored renderer.
 ## Project layout
 
 ```
-src/pytutor_widget/
+src/codelens_widget/
   __init__.py        # trace_code(), _build_html(), CodeLens widget, %%codelens magic
   pg_logger.py       # VENDORED (patched) -- Guo's bdb-based tracer; entry: exec_script_str_local
   pg_encoder.py      # VENDORED (unmodified) -- value/heap encoder (REF, LIST, DICT, INSTANCE, ...)
@@ -36,11 +36,11 @@ CLAUDE.md
 
 - Python 3.9+ (works on 3.12+ after the `imp` patch below). Runtime deps (`anywidget`,
   `traitlets`) are declared in `pyproject.toml`; install the package with `pip install -e .`.
-- After install: `from pytutor_widget import CodeLens` (the importable package lives at `src/pytutor_widget/`).
+- After install: `from codelens_widget import CodeLens` (the importable package lives at `src/codelens_widget/`).
 - Headless schema test (no browser needed): run the notebook's final cell.
 - JS sanity check of our own glue (not the vendored libs):
   ```bash
-  python -c "import pytutor_widget as c; open('/tmp/e.mjs','w').write(c._ESM)"
+  python -c "import codelens_widget as c; open('/tmp/e.mjs','w').write(c._ESM)"
   node --check /tmp/e.mjs
   ```
 

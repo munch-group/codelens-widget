@@ -37,7 +37,7 @@ interlinks:
     #   inv: objects-test.txt
 
 website:
-  title: "pytutor-widget"
+  title: "codelens-widget"
   page-navigation: true
   navbar:
     left:
@@ -47,7 +47,7 @@ website:
       #   text: Gallery
     right:
       - icon: github
-        href: https://github.com/munch-group/pytutor-widget/
+        href: https://github.com/munch-group/codelens-widget/
   sidebar:
     - id: pages
       title: Get Started
@@ -76,7 +76,7 @@ format:
       theme: neutral 
 
 quartodoc:
-  package: pytutor-widget
+  package: codelens-widget
   style: pkgdown
   dir: api
   render_interlinks: true
@@ -90,7 +90,7 @@ quartodoc:
 
   sections:
     - title: Some section
-      package: pytutor_widget
+      package: codelens_widget
       desc: |
         Some description...
       contents:

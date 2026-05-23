@@ -1,7 +1,7 @@
-# CodeLens { #pytutor_widget.CodeLens }
+# CodeLens { #codelens_widget.CodeLens }
 
 ```python
-pytutor_widget.CodeLens(
+codelens_widget.CodeLens(
     code,
     height=520,
     lang='py3',

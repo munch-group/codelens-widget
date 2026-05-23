@@ -12,7 +12,7 @@ pixi run init
 Add upstream if not already added
 
 ```bash
-git remote add upstream https://github.com/munch-group/pytutor-widget.git
+git remote add upstream https://github.com/munch-group/codelens-widget.git
 ```
 
 Fetch upstream changes

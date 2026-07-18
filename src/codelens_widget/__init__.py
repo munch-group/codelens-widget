@@ -3,11 +3,11 @@ codelens_widget
 ================
 
 A CodeLens-style execution visualizer for Jupyter that uses **Philip Guo's real
-Online Python Tutor frontend** (`codelens.js`). The trace is produced in the live
+Online Python Tutor frontend** (`pytutor.js`). The trace is produced in the live
 kernel by Guo's own ``pg_logger`` (vendored, MIT-licensed), so the data is in his
-exact schema; it is then handed to ``codelens.js`` rendered inside a self-contained
+exact schema; it is then handed to ``pytutor.js`` rendered inside a self-contained
 ``<iframe>`` so the legacy jQuery/jsPlumb visualizer runs in the clean document it
-expects. Everything (codelens.js, jsPlumb 1.3.10, jQuery, jQuery UI, D3 v2) is
+expects. Everything (pytutor.js, jsPlumb 1.3.10, jQuery, jQuery UI, D3 v2) is
 vendored under ``vendor/``, so it works fully offline and identically across
 VS Code, JupyterLab, Notebook 7, and Colab.
 
@@ -39,7 +39,7 @@ Or, after import, the cell magic visualizes a whole cell::
 
 Attribution
 -----------
-Online Python Tutor (``pg_logger.py``, ``pg_encoder.py``, ``codelens.js`` and the
+Online Python Tutor (``pg_logger.py``, ``pg_encoder.py``, ``pytutor.js`` and the
 bundled libraries) is Copyright (C) Philip J. Guo, released under the MIT license.
 See the headers of the vendored files. This package only wraps and embeds it.
 """
@@ -70,7 +70,7 @@ __all__ = ["CodeLens", "trace_code", "register_codelens_magic"]
 
 _VENDOR = os.path.join(os.path.dirname(__file__), "vendor")
 
-# Load order matters: jQuery -> jQuery UI -> D3 -> jsPlumb -> ba-bbq -> qtip -> codelens.
+# Load order matters: jQuery -> jQuery UI -> D3 -> jsPlumb -> ba-bbq -> qtip -> pytutor.
 _JS_FILES = [
     "jquery.min.js",
     "jquery-ui.min.js",
@@ -78,9 +78,9 @@ _JS_FILES = [
     "jsplumb.min.js",
     "jquery.ba-bbq.min.js",
     "jquery.qtip.min.js",
-    "codelens.js",
+    "pytutor.js",
 ]
-_CSS_FILES = ["jquery-ui.min.css", "jquery.qtip.css", "codelens.css"]
+_CSS_FILES = ["jquery-ui.min.css", "jquery.qtip.css", "pytutor.css"]
 
 
 def _read_vendor(name):
@@ -92,11 +92,11 @@ def _html_inline_safe(text):
     r"""Defuse sequences that would prematurely terminate an inlined ``<script>``.
 
     The vendor bundle is inlined verbatim into an HTML ``<script>`` element, but
-    ``codelens.js`` contains literal ``</script>`` and ``<!--`` -- in its header
+    ``pytutor.js`` contains literal ``</script>`` and ``<!--`` -- in its header
     comment (which shows example ``<script src=...>`` includes) and in one string
     that builds a ``<script>`` block. The browser's HTML tokenizer ends the
     element at the first ``</script`` and is knocked into its "escaped" state by
-    ``<!--``, so without this everything after codelens.js's header (including the
+    ``<!--``, so without this everything after pytutor.js's header (including the
     global ``ExecutionVisualizer`` definition) is parsed as stray HTML and never
     runs. Backslash-escaping the ``<`` lead-in hides the tag from the tokenizer
     while staying inert in JS: inside a string ``"<\/script>"`` == ``"</script>"``

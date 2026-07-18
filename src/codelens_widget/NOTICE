@@ -7,7 +7,7 @@ which is distributed under the MIT License.
 
 Vendored files retain their original MIT license headers:
   - pg_encoder.py, pg_logger.py            (Python backend / trace generator)
-  - vendor/codelens.js, vendor/codelens.css  (frontend visualizer)
+  - vendor/pytutor.js, vendor/pytutor.css  (frontend visualizer)
   - vendor/jsplumb.min.js (jsPlumb 1.3.10), vendor/jquery*, vendor/d3.v2.min.js,
     vendor/jquery-ui.* , vendor/jquery.qtip.*  (third-party libraries OPT depends on,
     under their respective MIT/permissive licenses)

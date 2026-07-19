@@ -34,7 +34,7 @@
     "href": "api/index.html",
     "title": "Function reference",
     "section": "",
-    "text": "Some description…",
+    "text": "Some description…\n\n\n\nCodeLens",
     "crumbs": [
       "Function reference"
     ]
@@ -44,7 +44,7 @@
     "href": "api/index.html#some-section",
     "title": "Function reference",
     "section": "",
-    "text": "Some description…",
+    "text": "Some description…\n\n\n\nCodeLens",
     "crumbs": [
       "Function reference"
     ]

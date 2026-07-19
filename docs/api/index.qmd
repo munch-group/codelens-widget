@@ -5,3 +5,6 @@
 Some description...
 
 
+| | |
+| --- | --- |
+| [CodeLens](CodeLens.qmd#codelens_widget.CodeLens) |  |

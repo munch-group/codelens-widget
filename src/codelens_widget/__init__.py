@@ -172,16 +172,41 @@ html, body { margin: 0; padding: 6px; background: #fff;
 """ + _BUNDLE_JS + """
 </script>
 <script>
+/**
+ * Boot script for the standalone visualizer document (baked into srcdoc by
+ * _build_html()): constructs ExecutionVisualizer against the trace/options
+ * JSON embedded above, then keeps the parent window informed of this
+ * document's height so _ESM's onMessage handler can size the host iframe to
+ * fit. FRAME_ID starts as the literal placeholder "__OPT_FRAME_ID__" and is
+ * rewritten to a per-instance id by _ESM's render() before the srcdoc is
+ * assigned, so height reports can be told apart when a notebook has more
+ * than one CodeLens instance open.
+ */
 (function () {
   var FRAME_ID = "__OPT_FRAME_ID__";
   var traceData = """ + trace_json + """;
   var options = """ + opts_json + """;
+  /**
+   * Posts {__opt_height, __opt_id} to the parent window. Called once right
+   * after boot() and then re-run at 50/300/800ms, because
+   * ExecutionVisualizer's layout does not settle the instant it is
+   * constructed -- jsPlumb draws its connector SVGs and jQuery UI finishes
+   * computing offsets a little later, so a single early measurement would
+   * under-report the final height and clip content.
+   */
   function reportHeight() {
     try {
       var h = document.body.scrollHeight;
       parent.postMessage({ __opt_height: h, __opt_id: FRAME_ID }, "*");
     } catch (e) {}
   }
+  /**
+   * Constructs the visualizer and, whether or not that succeeds, starts the
+   * height-reporting/resize wiring. Errors are caught so a bad trace shows
+   * an inline failure message instead of leaving a blank iframe or throwing
+   * out of the jQuery-ready/load callback below (which would otherwise abort
+   * the reportHeight()/resize setup too).
+   */
   function boot() {
     try {
       window.__optViz = new ExecutionVisualizer("viz", traceData, options);
@@ -192,6 +217,9 @@ html, body { margin: 0; padding: 6px; background: #fff;
     [50, 300, 800].forEach(function (t) { setTimeout(reportHeight, t); });
     window.addEventListener("resize", reportHeight);
   }
+  // pytutor.js is jQuery-dependent, so prefer jQuery's DOM-ready handler when
+  // available; fall back to the plain "load" event on the off chance jQuery
+  // failed to load.
   if (window.jQuery) { jQuery(boot); } else { window.addEventListener("load", boot); }
 })();
 </script>
@@ -203,8 +231,21 @@ html, body { margin: 0; padding: 6px; background: #fff;
 # --------------------------------------------------------------------------- #
 
 _ESM = r"""
+/**
+ * anywidget render entry point. Builds a sandboxed iframe, seeds it with the
+ * self-contained HTML document _build_html() produced (the `srcdoc` model
+ * trait), and wires up postMessage-based auto-resize so the iframe tracks
+ * the visualizer's actual content height. sandbox="allow-scripts
+ * allow-same-origin" is safe specifically because that document only ever
+ * renders a precomputed trace -- it never executes arbitrary/untrusted user
+ * code (see CLAUDE.md, "Why an iframe") -- so there is no user-controlled
+ * script for the same-origin grant to expose anything to.
+ */
 function render({ model, el }){
   el.innerHTML = "";
+  // Per-instance id, substituted for the "__OPT_FRAME_ID__" placeholder left
+  // by _build_html(). Lets onMessage below tell this iframe's height reports
+  // apart from another CodeLens instance's in the same notebook.
   const frameId = "opt_" + Math.random().toString(36).slice(2);
   const iframe = document.createElement("iframe");
   iframe.style.width = "100%";
@@ -221,6 +262,15 @@ function render({ model, el }){
   iframe.srcdoc = html;
   el.appendChild(iframe);
 
+  /**
+   * Resizes the iframe to fit its content once the boot script inside it
+   * reports a height (see reportHeight() in _build_html's boot script).
+   * Filtered by frameId because the sender posts with target origin "*", so
+   * this listener would otherwise also fire for a sibling CodeLens iframe's
+   * reports. The +10px pad and 200px floor absorb rounding/border slop so
+   * content is never clipped and the frame never collapses to nothing while
+   * it's still booting.
+   */
   function onMessage(ev){
     const d = ev.data;
     if (d && d.__opt_id === frameId && typeof d.__opt_height === "number"){
@@ -229,9 +279,16 @@ function render({ model, el }){
   }
   window.addEventListener("message", onMessage);
 
+  /**
+   * Re-applies the model's configured `height` trait, overriding whatever
+   * postMessage last auto-fit it to. Fires on `change:height` so setting
+   * `CodeLens.height` from Python after construction takes effect live.
+   */
   const onHeight = () => { iframe.style.height = (model.get("height") || 520) + "px"; };
   model.on("change:height", onHeight);
 
+  // Standard anywidget teardown, run on model destroy/re-render, so these
+  // listeners don't leak (e.g. across a Jupyter cell re-execution).
   return () => {
     window.removeEventListener("message", onMessage);
     model.off("change:height", onHeight);

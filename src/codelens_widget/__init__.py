@@ -287,11 +287,25 @@ function render({ model, el }){
   const onHeight = () => { iframe.style.height = (model.get("height") || 520) + "px"; };
   model.on("change:height", onHeight);
 
+  /**
+   * Re-seeds the iframe if `srcdoc` changes after the initial render (e.g.
+   * a late-arriving state sync on a cold kernel/frontend, or a future
+   * `CodeLens.srcdoc = ...` from Python). Without this, render() only ever
+   * reads srcdoc once, so a srcdoc update that lands after the view is
+   * already constructed would otherwise leave the iframe blank.
+   */
+  const onSrcdoc = () => {
+    const updated = (model.get("srcdoc") || "").replace("__OPT_FRAME_ID__", frameId);
+    iframe.srcdoc = updated;
+  };
+  model.on("change:srcdoc", onSrcdoc);
+
   // Standard anywidget teardown, run on model destroy/re-render, so these
   // listeners don't leak (e.g. across a Jupyter cell re-execution).
   return () => {
     window.removeEventListener("message", onMessage);
     model.off("change:height", onHeight);
+    model.off("change:srcdoc", onSrcdoc);
   };
 }
 export default { render };
@@ -306,10 +320,8 @@ class CodeLens(anywidget.AnyWidget):
 
     def __init__(self, code, height=520, lang="py3", options=None,
                  cumulative_mode=False, heap_primitives=False):
-        super().__init__()
         if not isinstance(code, str):
             raise TypeError("CodeLens(code) expects a source string")
-        self.height = height
         opts = dict(_DEFAULT_OPTIONS)
         opts["lang"] = lang
         opts["heapPrimitives"] = heap_primitives
@@ -317,7 +329,17 @@ class CodeLens(anywidget.AnyWidget):
             opts.update(options)
         data = trace_code(code, cumulative_mode=cumulative_mode,
                           heap_primitives=heap_primitives)
-        self.srcdoc = _build_html(data, opts)
+        srcdoc = _build_html(data, opts)
+        # Pass srcdoc/height as constructor kwargs (rather than assigning
+        # them after super().__init__()) so ipywidgets' Widget.__init__
+        # opens the comm with the real content already in its single
+        # initial state message. Setting them afterwards sends the default
+        # empty srcdoc first and the real HTML as a follow-up sync message
+        # that the JS render() never re-reads (see _ESM) -- on a cold
+        # kernel/frontend the view can be constructed from that first empty
+        # message, baking in a permanently blank iframe until the cell is
+        # re-run.
+        super().__init__(srcdoc=srcdoc, height=height)
 
 
 def register_codelens_magic(ipython=None):

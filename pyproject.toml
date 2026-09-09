@@ -36,6 +36,22 @@ exclude = ["test*"]
 [tool.setuptools.package-data]
 codelens_widget = ["vendor/*", "NOTICE"]
 
+# Anchors pytest's rootdir to this repo. Without a [tool.pytest.ini_options]
+# table here, a pyproject.toml is *not* a config file as far as pytest is
+# concerned, so pytest keeps walking up the tree looking for one and adopts the
+# first it meets -- which on this machine was a stray pyproject.toml in the home
+# directory, giving `rootdir: /Users/<name>` and that file's addopts and
+# testpaths. confcutdir defaults to rootdir, so conftest collection then spans
+# the whole home directory, and one unresponsive path in it (a cloud-sync folder
+# whose stat hangs) fails the run before anything is collected. The path below
+# is this repo's own: the `test` task nbconverts the tutorial notebooks into
+# tests/pytest/tmp and runs pytest over tests/pytest, so that -- not the `test/`
+# directory the sibling repos use -- is where tests live here. The directory is
+# generated rather than checked in, so a bare `pytest` before `pixi run test`
+# has nothing to collect, which is the honest answer rather than a silent one.
+[tool.pytest.ini_options]
+testpaths = ["tests/pytest"]
+
 [tool.pixi.workspace]
 channels = ["conda-forge", "munch-group"]
 platforms = ["osx-arm64", "osx-64", "win-64", "linux-64"]
@@ -57,7 +73,6 @@ ipython = "*"
 anywidget = "*"
 seaborn = "*"
 nbdime = ">=4.0.2,<5"
-vscodenb = "*"
 r-rsvg = "*"
 
 # [tool.pixi.pypi-dependencies]

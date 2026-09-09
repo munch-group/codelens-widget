@@ -199,6 +199,25 @@ on newer versions (per Guo's own header comment). D3 must stay v2 for the same r
 - Browser support: the iframe + `postMessage` auto-resize works in Chromium (VS Code,
   Colab) and modern Firefox/Safari. The visual rendering is the one thing not covered by
   the headless tests -- verify once in your target frontend.
+- **`pyproject.toml` carries a `[tool.pytest.ini_options]` table -- keep it, even
+  though this repo has no pytest suite.** A `pyproject.toml` *without* that table
+  is not a config file as far as pytest is concerned, so pytest keeps walking up
+  the tree looking for one and adopts the first it meets. On this machine that
+  was a stray `pyproject.toml` in the home directory, which gave
+  `rootdir: /Users/<name>` plus that file's `addopts` and `testpaths` (confirmed:
+  before the fix, `pytest --collect-only test/` here reported exactly that
+  rootdir). Since `confcutdir` defaults to rootdir, conftest collection then
+  spans the entire home directory, and one unresponsive path in it -- a
+  cloud-sync folder whose `stat` hangs -- fails the run with a `TimeoutError`
+  before anything is collected. The sibling `im-pytest` repo hit precisely that.
+  The table is therefore load-bearing here *because* there is nothing else to
+  anchor rootdir, not despite the absent suite. Its `testpaths` names
+  `tests/pytest`, matching the `test` task, which is still the stub described
+  under Environment & commands -- so a bare `pytest` warns that testpaths matched
+  nothing and falls back to searching recursively from the current directory.
+  That fallback is harmless here (the repo contains no `test_*.py` at all,
+  vendored code included) and is scoped to the repo rather than to `$HOME`,
+  which is the whole point.
 
 ## Updating the vendored Online Python Tutor
 
